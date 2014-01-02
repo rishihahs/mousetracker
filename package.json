@@ -1,0 +1,37 @@
+{
+  "name": "mousetracker",
+  "version": "0.0.1",
+  "description": "Tracks cursor and calculates position relative to DOM elements",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rishihahs/mousetracker.git"
+  },
+  "keywords": [
+    "mouse"
+  ],
+  "author": "Rishi Shah <rishihahs@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rishihahs/mousetracker/issues"
+  },
+  "homepage": "https://github.com/rishihahs/mousetracker",
+  "devDependencies": {
+    "tape": "~2.3.2"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/6..latest",
+      "chrome/4..latest",
+      "firefox/3..latest",
+      "safari/5.1..latest",
+      "opera/11.0..latest",
+      "iphone/6",
+      "ipad/6"
+    ]
+  }
+}
