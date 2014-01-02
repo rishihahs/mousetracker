@@ -33,5 +33,8 @@
       "iphone/6",
       "ipad/6"
     ]
+  },
+  "dependencies": {
+    "domtalk": "0.0.1"
   }
 }
