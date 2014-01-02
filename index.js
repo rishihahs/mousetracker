@@ -53,6 +53,21 @@ MouseTracker.prototype = {
             offsetX: posX,
             offsetY: posY
         });
+    },
+
+    triggerClick: function(element) {
+        this.userClick = false;
+        if (typeof element.click === 'function') {
+            element.click();
+        } else {
+            var event = new MouseEvent('click', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+
+            element.dispatchEvent(event);
+        }
     }
 }
 
