@@ -1,17 +1,12 @@
 var domtalk = require('domtalk');
 
-module.exports = function(clickCallback, ignored) {
-    var mousetracker = new MouseTracker(clickCallback, ignored);
-
-    // Attach event listeners
-    addEventListener('click', function(e) {
-        mousetracker.clickHandler(e);
-    });
-
-    return mousetracker;
-}
+module.exports = MouseTracker;
 
 function MouseTracker(clickCallback, ignored) {
+    if (!(this instanceof MouseTracker)) {
+        return new MouseTracker(clickCallback, ignored);
+    }
+
     this.clickCallback = clickCallback;
     this.ignored = ignored;
     this.userClick = true;
@@ -21,6 +16,12 @@ function MouseTracker(clickCallback, ignored) {
             throw "Argument " + i + " is not a function"
         }
     }
+
+    // Attach event listeners
+    var self = this;
+    addEventListener('click', function(e) {
+        self.clickHandler(e);
+    });
 
     return this;
 }
