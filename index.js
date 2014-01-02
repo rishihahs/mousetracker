@@ -46,8 +46,10 @@ MouseTracker.prototype = {
 
         // Calculate the mouse position relative to the element
         var elementOffset = getElementOffset(element);
-        var posX = event.pageX - elementOffset.left;
-        var posY = event.pageY - elementOffset.top;
+        console.log(elementOffset);
+        console.log(event.pageX);
+        var posX = event.pageX - Math.floor(elementOffset.left);
+        var posY = event.pageY - Math.floor(elementOffset.top);
 
         this.clickCallback({
             selector: selector,
@@ -56,20 +58,56 @@ MouseTracker.prototype = {
         });
     },
 
-    triggerClick: function(element) {
+    triggerClick: function(element, offsetX, offsetY) {
         this.userClick = false;
-        if (typeof element.click === 'function') {
-            element.click();
-        } else {
-            var event = new MouseEvent('click', {
-                'view': window,
-                'bubbles': true,
-                'cancelable': true
-            });
-
-            element.dispatchEvent(event);
-        }
+        dispatchEvent(element, mouseEvent('click', offsetX, offsetY), 'click');
     }
+}
+
+function mouseEvent(type, cx, cy) {
+    var evt;
+    var e = {
+        bubbles: true,
+        cancelable: (type != "mousemove"),
+        view: window,
+        detail: 0,
+        clientX: cx,
+        clientY: cy,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        metaKey: false,
+        button: 0,
+        relatedTarget: undefined
+    };
+    if (typeof(document.createEvent) == "function") {
+        evt = document.createEvent("MouseEvents");
+        evt.initMouseEvent(type,
+            e.bubbles, e.cancelable, e.view, e.detail,
+            e.screenX, e.screenY, e.clientX, e.clientY,
+            e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
+            e.button, document.body.parentNode);
+    } else if (document.createEventObject) {
+        evt = document.createEventObject();
+        for (prop in e) {
+            evt[prop] = e[prop];
+        }
+        evt.button = {
+            0: 1,
+            1: 4,
+            2: 2
+        }[evt.button] || evt.button;
+    }
+    return evt;
+}
+
+function dispatchEvent(el, evt, type) {
+    if (el.dispatchEvent) {
+        el.dispatchEvent(evt);
+    } else if (el.fireEvent) {
+        el.fireEvent('on' + type, evt);
+    }
+    return evt;
 }
 
 // Get element offset
