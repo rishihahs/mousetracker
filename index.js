@@ -18,10 +18,9 @@ MouseTracker.prototype.start = function(clickCallback) {
 
     self.jQuery(document).on('click', function() {
         var args = Array.prototype.slice.call(arguments);
-        args.unshift(self.ignore);
         args.unshift(clickCallback);
 
-        clickHandler.apply(null, args);
+        clickHandler.apply(self, args);
     });
 }
 
@@ -51,7 +50,7 @@ MouseTracker.prototype.stop = function() {
     this.jQuery(document).off('click');
 }
 
-function clickHandler(callback, ignore, event, param) {
+function clickHandler(callback, event, param) {
     // Programmatic Click
     if (param === '_mousetrackerInternal') {
         return;
@@ -59,7 +58,7 @@ function clickHandler(callback, ignore, event, param) {
 
     var element = event.target;
 
-    if (ignore(element)) {
+    if (this.ignore(element)) {
         return;
     }
 
