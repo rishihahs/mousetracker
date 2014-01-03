@@ -44,7 +44,7 @@ MouseTracker.prototype.triggerClick = function(element, offsetX, offsetY) {
     });
 
     // Trigger event
-    $el.trigger(event);
+    $el.trigger(event, ['_mousetrackerInternal']);
 }
 
 MouseTracker.prototype.stop = function() {
