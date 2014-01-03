@@ -7,6 +7,7 @@ var mousetracker;
 // Setup and Teardown
 var test = tape({
     setup: function(t) {
+        document.open();
         document.write('<!doctype html><html><body><input type="checkbox"><br><button>Hi There</button></body></html>');
         mousetracker = new MouseTracker($, function(args) {
             return !true;
