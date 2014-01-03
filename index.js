@@ -25,6 +25,28 @@ MouseTracker.prototype.start = function(clickCallback) {
     });
 }
 
+MouseTracker.prototype.triggerClick = function(element, offsetX, offsetY) {
+    var $el;
+
+    // Check whether jQuery or DOM element
+    if (element instanceof this.jQuery || (element[0] && element[0].nodeType === 1)) {
+        $el = this.jQuery(element[0]);
+    } else {
+        $el = this.jQuery(element);
+    }
+
+    // Calculate where in the element to click
+    var offset = $el.offset();
+    var event = this.jQuery.Event("click", {
+        which: 1,
+        pageX: offset.left + offsetX,
+        pageY: offset.top + offsetY
+    });
+
+    // Trigger event
+    $el.trigger(event);
+}
+
 MouseTracker.prototype.stop = function() {
     this.jQuery(document).off('click');
 }
