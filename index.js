@@ -19,9 +19,10 @@ function MouseTracker(clickCallback, ignored) {
 
     // Attach event listeners
     var self = this;
-    addEventListener('click', function(e) {
+    this.clickEventListenerCallback = function(e) {
         self.clickHandler(e);
-    });
+    };
+    addEventListener('click', this.clickEventListenerCallback);
 
     return this;
 }
@@ -59,6 +60,10 @@ MouseTracker.prototype = {
     triggerClick: function(element, offsetX, offsetY) {
         this.userClick = false;
         mouseEvent(element, 'click', offsetX, offsetY);
+    },
+
+    destroy: function() {
+        removeEventListener('click', this.clickEventListenerCallback);
     }
 }
 
@@ -130,5 +135,13 @@ function addEventListener(event, callback) {
         document.addEventListener(event, callback, false);
     } else {
         document.attachEvent('on' + event, callback);
+    }
+}
+
+function removeEventListener(event, callback) {
+    if (document.removeEventListener) {
+        document.removeEventListener(event, callback, false);
+    } else {
+        document.detachEvent('on' + event, callback);
     }
 }

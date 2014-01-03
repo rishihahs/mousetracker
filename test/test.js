@@ -13,6 +13,7 @@ test('click handling', function(t) {
         t.equal(args.selector, 'body *:nth-child(3)', 'selectors are equal');
         t.equal(args.offsetX, 6, 'horizontal position correct');
         t.equal(args.offsetY, 6, 'vertical position correct');
+        mousetracker.destroy();
         t.end();
     }, function(args) {
         return false;
@@ -21,8 +22,38 @@ test('click handling', function(t) {
     click(button, 6, 6);
 });
 
+test('click triggering', function(t) {
+    setUpDocument();
+    var checkbox = document.getElementsByTagName('input')[0];
+    var button = document.getElementsByTagName('button')[0];
+
+    var mousetracker = new MouseTracker(function(args) {}, function(args) {
+        return false;
+    });
+
+    var offset = getElementOffset(button);
+
+    addEventListener('click', function(event) {
+        t.plan(2);
+        t.equal(event.clientX, offset.left + 12, 'horizontal click position');
+        t.equal(event.clientY, offset.top + 12, 'vertical click position');
+        mousetracker.destroy();
+        t.end();
+    });
+
+    mousetracker.triggerClick(button, 12, 12);
+});
+
 function setUpDocument() {
     document.write('<!doctype html><html><body><input type="checkbox"><br><button>Hi There</button></body></html>');
+}
+
+function addEventListener(event, callback) {
+    if (document.addEventListener) {
+        document.addEventListener(event, callback, false);
+    } else {
+        document.attachEvent('on' + event, callback);
+    }
 }
 
 function click(element, offsetX, offsetY) {
@@ -64,7 +95,7 @@ function mouseEvent(el, type, cx, cy) {
             2: 2
         }[evt.button] || evt.button;
     }
-    
+
     if (el.dispatchEvent) {
         el.dispatchEvent(evt);
     } else if (el.fireEvent) {
