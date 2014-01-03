@@ -45,9 +45,7 @@ MouseTracker.prototype = {
         var selector = domtalk.getSelectorFromElement(element);
 
         // Calculate the mouse position relative to the element
-        var elementOffset = getElementOffset(element);
-        console.log(elementOffset);
-        console.log(event.pageX);
+        var elementOffset = getElementOffset(element);console.log(event.pageX);
         var posX = event.pageX - Math.floor(elementOffset.left);
         var posY = event.pageY - Math.floor(elementOffset.top);
 
@@ -60,19 +58,20 @@ MouseTracker.prototype = {
 
     triggerClick: function(element, offsetX, offsetY) {
         this.userClick = false;
-        dispatchEvent(element, mouseEvent('click', offsetX, offsetY), 'click');
+        mouseEvent(element, 'click', offsetX, offsetY);
     }
 }
 
-function mouseEvent(type, cx, cy) {
+function mouseEvent(el, type, cx, cy) {
     var evt;
+    var elOffset = getElementOffset(el);
     var e = {
         bubbles: true,
         cancelable: (type != "mousemove"),
         view: window,
         detail: 0,
-        clientX: cx,
-        clientY: cy,
+        clientX: elOffset.left + cx,
+        clientY: elOffset.top + cy,
         ctrlKey: false,
         altKey: false,
         shiftKey: false,
@@ -98,16 +97,12 @@ function mouseEvent(type, cx, cy) {
             2: 2
         }[evt.button] || evt.button;
     }
-    return evt;
-}
-
-function dispatchEvent(el, evt, type) {
+    
     if (el.dispatchEvent) {
         el.dispatchEvent(evt);
     } else if (el.fireEvent) {
         el.fireEvent('on' + type, evt);
     }
-    return evt;
 }
 
 // Get element offset
@@ -131,15 +126,9 @@ function getElementOffset(elem) {
 
 // Normalize event listener
 function addEventListener(event, callback) {
-    var eventFunction;
-    var eventName = event;
-
     if (document.addEventListener) {
-        eventFunction = document.addEventListener;
+        document.addEventListener(event, callback, false);
     } else {
-        eventFunction = document.attachEvent;
-        eventName = 'on' + eventName;
+        document.attachEvent('on' + event, callback);
     }
-
-    eventFunction(eventName, callback);
 }

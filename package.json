@@ -35,7 +35,6 @@
     ]
   },
   "dependencies": {
-    "domtalk": "0.0.2",
-    "bean": "~1.0.6"
+    "domtalk": "0.0.2"
   }
 }
