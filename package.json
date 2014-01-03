@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/rishihahs/mousetracker",
   "devDependencies": {
-    "tape": "~2.3.2"
+    "tape": "~2.3.2",
+    "jquery": "~1.8.3",
+    "wrapping-tape": "0.0.3"
   },
   "testling": {
     "files": "test/*.js",
