@@ -29,7 +29,6 @@ test('click handling', function(t) {
         t.equal(args.selector, 'body *:nth-child(3)', 'selectors are equal');
         t.equal(args.offsetX, 6, 'horizontal offset equal');
         t.equal(args.offsetY, 6, 'vertical offset equal');
-        t.end();
     }
 });
 
@@ -44,7 +43,6 @@ test('click trigger', function(t) {
         t.equal(event.target, $('button')[0], 'clicked right element');
         t.equal(event.pageX, $('button').offset().left + 6, 'clicked right horizontal element offset');
         t.equal(event.pageY, $('button').offset().top + 6, 'clicked right vertical element offset');
-        t.end();
     }
 });
 
@@ -57,7 +55,6 @@ test('absolute mousemove handling', function(t) {
     function callback(args) {
         t.equal(args.top, 300, 'absolute vertical mousemove correct');
         t.equal(args.left, 300, 'absolute horizontal mousemove correct');
-        t.end();
     }
 });
 
@@ -73,7 +70,6 @@ test('relative mousemove handling', function(t) {
         t.equal(args.selector, 'body *:nth-child(3)', 'correct element mousemove')
         t.equal(args.top, 6, 'relative vertical mousemove correct');
         t.equal(args.left, 6, 'relative horizontal mousemove correct');
-        t.end();
     }
 });
 
