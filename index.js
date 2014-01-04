@@ -1,6 +1,7 @@
 var domtalk = require('domtalk');
 
 var MIN_MOVE = 3; // minimum pixels to move to count for mousemove
+var MIN_TIME = 300; // minimum time in ms to count for mousemove
 
 module.exports = MouseTracker;
 
@@ -65,9 +66,17 @@ MouseTracker.prototype.stop = function() {
 }
 
 function mousemoveHandler(callback, event) {
+    var time = Date.now ? Date.now() : new Date().getTime();
+    if (time - this.lastTime < MIN_TIME) {
+        return;
+    }
+    this.lastTime = time;
+
     if (Math.abs(this.lastMousemoveX - event.pageX) < MIN_MOVE && Math.abs(this.lastMousemoveY - event.pageY) < MIN_MOVE) {
         return;
     }
+    this.lastMousemoveX = event.pageX;
+    this.lastMousemoveY = event.pageY;
 
     var element = event.target;
 
