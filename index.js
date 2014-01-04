@@ -1,5 +1,7 @@
 var domtalk = require('domtalk');
 
+var MIN_MOVE = 3; // minimum pixels to move to count for mousemove
+
 module.exports = MouseTracker;
 
 function MouseTracker(jQuery, ignore) {
@@ -13,15 +15,26 @@ function MouseTracker(jQuery, ignore) {
     return this;
 }
 
-MouseTracker.prototype.start = function(clickCallback) {
+MouseTracker.prototype.start = function(clickCallback, mousemoveCallback) {
     var self = this;
 
-    self.jQuery(document).on('click', function() {
-        var args = Array.prototype.slice.call(arguments);
-        args.unshift(clickCallback);
+    if (clickCallback) {
+        self.jQuery(document).on('click', function() {
+            var args = Array.prototype.slice.call(arguments);
+            args.unshift(clickCallback);
 
-        clickHandler.apply(self, args);
-    });
+            clickHandler.apply(self, args);
+        });
+    }
+
+    if (mousemoveCallback) {
+        self.jQuery(document).on('mousemove', function() {
+            var args = Array.prototype.slice.call(arguments);
+            args.unshift(mousemoveCallback);
+
+            mousemoveHandler.apply(self, args);
+        });
+    }
 }
 
 MouseTracker.prototype.triggerClick = function(element, offsetX, offsetY) {
@@ -48,6 +61,33 @@ MouseTracker.prototype.triggerClick = function(element, offsetX, offsetY) {
 
 MouseTracker.prototype.stop = function() {
     this.jQuery(document).off('click');
+    this.jQuery(document).off('mousemove');
+}
+
+function mousemoveHandler(callback, event) {
+    if (Math.abs(this.lastMousemoveX - event.pageX) < MIN_MOVE && Math.abs(this.lastMousemoveY - event.pageY) < MIN_MOVE) {
+        return;
+    }
+
+    var element = event.target;
+
+    // If element is document, html, etc. then just send coordinates
+    if (!element || this.ignore(element) || element === document || element === document.documentElement || element === document.body) {
+        callback({
+            top: event.pageY,
+            left: event.pageX
+        });
+        return;
+    }
+
+    var $el = this.jQuery(element);
+    var offset = $el.offset();
+
+    callback({
+        element: domtalk.getSelectorFromElement(element),
+        top: event.pageY - offset.top,
+        left: event.pageX - offset.left
+    });
 }
 
 function clickHandler(callback, event, param) {

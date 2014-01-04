@@ -48,12 +48,50 @@ test('click trigger', function(t) {
     }
 });
 
+test('absolute mousemove handling', function(t) {
+    t.plan(2);
+    mousetracker.start(null, callback);
+
+    mousemove($(document), 300, 300);
+
+    function callback(args) {
+        t.equal(args.top, 300, 'absolute vertical mousemove correct');
+        t.equal(args.left, 300, 'absolute horizontal mousemove correct');
+        t.end();
+    }
+});
+
+test('relative mousemove handling', function(t) {
+    t.plan(3);
+    mousetracker.start(null, callback);
+
+    var offset = $('button').offset();
+
+    mousemove($(document), offset.left + 6, offset.top + 6, $('button')[0]);
+
+    function callback(args) {
+        t.equal(args.element, 'body *:nth-child(3)', 'correct element mousemove')
+        t.equal(args.top, 6, 'relative vertical mousemove correct');
+        t.equal(args.left, 6, 'relative horizontal mousemove correct');
+        t.end();
+    }
+});
+
 function click(element, offsetX, offsetY) {
     var offset = element.offset();
     var event = $.Event("click", {
         which: 1,
         pageX: offset.left + offsetX,
         pageY: offset.top + offsetY
+    });
+    element.trigger(event);
+}
+
+function mousemove(element, pageX, pageY, target) {
+    var event = $.Event("mousemove", {
+        target: target,
+        pageX: pageX,
+        pageY: pageY
     });
     element.trigger(event);
 }
