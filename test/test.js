@@ -70,7 +70,7 @@ test('relative mousemove handling', function(t) {
     mousemove($(document), offset.left + 6, offset.top + 6, $('button')[0]);
 
     function callback(args) {
-        t.equal(args.element, 'body *:nth-child(3)', 'correct element mousemove')
+        t.equal(args.selector, 'body *:nth-child(3)', 'correct element mousemove')
         t.equal(args.top, 6, 'relative vertical mousemove correct');
         t.equal(args.left, 6, 'relative horizontal mousemove correct');
         t.end();

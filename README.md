@@ -13,7 +13,7 @@ usage
     
 Here, `$` is jQuery (used for events), and `ignore` is a function that gets passed a DOM element as an argument. It should return true if mouse interactions with the element should be ignored.
 
-    mousetracker.start(clickCallback)
+    mousetracker.start(clickCallback, mousemoveCallback)
     
 This starts the mousetracker and sets up all the listeners.
 
@@ -24,6 +24,14 @@ This starts the mousetracker and sets up all the listeners.
 `offsetX`: the x offset of the cursor's position in the element
 
 `offsetY`: the y offset of the cursor's position in the element
+
+`mousemoveCallback(obj)` is the callback executed on mouse movement. The parameter is an object with the following properties:
+
+`element`: the CSS selector of the element hovered over (unless hovering over no particular element)
+
+`offsetX`: the x offset of the cursor's position in the element (or absolute position if not hovering over an element)
+
+`offsetY`: the y offset of the cursor's position in the element (or absolute position if not hovering over an element)
 
     mousetracker.triggerClick(element, offsetX, offsetY)
     

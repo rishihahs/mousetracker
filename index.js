@@ -84,7 +84,7 @@ function mousemoveHandler(callback, event) {
     var offset = $el.offset();
 
     callback({
-        element: domtalk.getSelectorFromElement(element),
+        selector: domtalk.getSelectorFromElement(element),
         top: event.pageY - offset.top,
         left: event.pageX - offset.left
     });
